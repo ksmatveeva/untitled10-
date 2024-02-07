@@ -1,1 +1,1 @@
-Установка завершена. Все необходимые директории и файлы созданы успешно.
+Ошибка при создании файла /Users/kseniamatveeva/IdeaProjects/untitled10/Macintosh HD/Программы/Games/temp/temp.txt

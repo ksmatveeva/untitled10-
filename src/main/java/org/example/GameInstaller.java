@@ -1,3 +1,5 @@
+package org.example;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -5,11 +7,16 @@ import java.io.IOException;
 public class GameInstaller {
 
     public static void main(String[] args) {
-        String gamesFolderPath = "Macintosh HD/Программы/Games";
-        createDirectoriesAndFiles(gamesFolderPath);
+
+        String gamesFolderPath =  "Macintosh HD/Программы/Games";
+
+
+        createDirectories(gamesFolderPath);
+
+        writeLogToFile(gamesFolderPath, "temp.txt");
     }
 
-    private static void createDirectoriesAndFiles(String gamesFolderPath) {
+    private static void createDirectories(String gamesFolderPath) {
         createDirectory(gamesFolderPath, "src");
         createDirectory(gamesFolderPath + "/src", "main");
         createDirectory(gamesFolderPath + "/src", "test");
@@ -20,16 +27,15 @@ public class GameInstaller {
         createDirectory(gamesFolderPath, "savegames");
         createDirectory(gamesFolderPath, "temp");
         createFile(gamesFolderPath + "/temp", "temp.txt");
-        createAndWriteLog(gamesFolderPath, "temp.txt");
     }
 
     private static void createDirectory(String parentPath, String directoryName) {
         File directory = new File(parentPath, directoryName);
         if (!directory.exists()) {
-            if (directory.mkdirs()) {
-                System.out.println("Директория " + directory.getAbsolutePath() + " создана.");
+            if (directory.mkdir()) {
+                appendToLog("Директория " + directory.getAbsolutePath() + " создана.");
             } else {
-                System.out.println("Ошибка при создании директории " + directory.getAbsolutePath());
+                appendToLog("Ошибка при создании директории " + directory.getAbsolutePath());
             }
         }
     }
@@ -38,24 +44,32 @@ public class GameInstaller {
         File file = new File(parentPath, fileName);
         try {
             if (file.createNewFile()) {
-                System.out.println("Файл " + file.getAbsolutePath() + " создан.");
+                appendToLog("Файл " + file.getAbsolutePath() + " создан.");
             } else {
-                System.out.println("Ошибка при создании файла " + file.getAbsolutePath());
+                appendToLog("Ошибка при создании файла " + file.getAbsolutePath());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void createAndWriteLog(String gamesFolderPath, String logFileName) {
+    private static void appendToLog(String message) {
+        //System.out.println(message);  // Выводим сообщение в консоль
+        log.append(message).append("\n");
+    }
+
+    private static void writeLogToFile(String gamesFolderPath, String logFileName) {
         File logFile = new File(gamesFolderPath + "/temp", logFileName);
         try (FileWriter writer = new FileWriter(logFile)) {
-            writer.write("Установка завершена. Все необходимые директории и файлы созданы успешно.");
+            writer.write(log.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    private static StringBuilder log = new StringBuilder();
 }
+
 
 
 
